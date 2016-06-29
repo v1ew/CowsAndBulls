@@ -2,6 +2,8 @@ package v1ew.cowsandbulls;
 
 /**
  * Created by Shakhov on 21.06.2016.
+ * Класс Digit представляет цифру, имеющую статус и позицию. Для коров доступна история по занимаемым ранее позициям.
+ * История учитывается при подготовке нового варианта.
  */
 public class Digit implements Comparable<Digit> {
     public Digit(int digit) {
@@ -18,7 +20,8 @@ public class Digit implements Comparable<Digit> {
             digitToCopy.positions[i] = this.positions[i];
         }
     }
-
+    // TODO
+    // Необходимо избавиться от этой функции. Вместо нее использовать clone()
     public int compareTo(Digit d) {
         if(this.digit < d.digit) return -1;
         else if(this.digit == d.digit) return 0;
