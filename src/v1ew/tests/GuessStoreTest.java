@@ -19,14 +19,6 @@ public class GuessStoreTest {
         assertEquals(2, guessStore.guessCount());
         assertTrue(guessStore.isGuessNew("6789"));
         assertFalse(guessStore.isGuessNew("4567"));
-        GuessAnswer guessAnswer = guessStore.getGuessAnswer();
-        assertEquals("0123", guessAnswer.getGuess());
-        assertEquals(10, guessAnswer.getAnswer());
-        guessAnswer = guessStore.getGuessAnswer();
-        assertEquals("4567", guessAnswer.getGuess());
-        assertEquals(21, guessAnswer.getAnswer());
-        guessAnswer = guessStore.getGuessAnswer();
-        assertNull(guessAnswer);
     }
 
     @Test

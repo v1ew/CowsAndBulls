@@ -141,14 +141,13 @@ public class Guesser {
         do {
             int answer = guessStore.getAnswer(storeIndex);
             String number = guessStore.getGuess(storeIndex);
-            Arranger arranger = new Arranger(answer, NUMBER_LENGTH);
-            String arrange = arranger.arrange(guessStore.getArrangeIndexWithIncrement(storeIndex));
+            String arrange = guessStore.getArrange(storeIndex);
             while(arrange.length() > 0) {
                 if(isArrangeCorrect(arrange, number, answer)) {
                     arrangeFound = true;
                     break;
                 }
-                arrange = arranger.arrange(guessStore.getArrangeIndexWithIncrement(storeIndex));
+                arrange = guessStore.getArrange(storeIndex);
             }
             if(arrangeFound) {
                 guessStore.saveDigits(storeIndex, digits);

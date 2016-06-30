@@ -8,8 +8,9 @@ import java.util.ArrayList;
 public class GuessStore {
     public GuessStore() {
         guessAnswers = new ArrayList<>();
-        arrangeIndexes = new ArrayList<>();
         digitsStore = new ArrayList<>();
+        arrangers = new ArrayList<>();
+        guessDatas = new ArrayList<>();
     }
 
     public void saveDigits(int index, Digits digitsToSave) {
@@ -31,8 +32,9 @@ public class GuessStore {
 
     public void saveGuess(String guess, int answer) {
         guessAnswers.add(new GuessAnswer(guess, answer));
-        arrangeIndexes.add(0);
+        arrangers.add(new Arranger(answer, Guesser.NUMBER_LENGTH));
         digitsStore.add(new Digits());
+        guessDatas.add(new GuessData(guess, answer));
     }
 
     public int guessCount() {
@@ -56,42 +58,22 @@ public class GuessStore {
         return guessAnswers.get(index).getAnswer();
     }
 
-    public GuessAnswer getGuessAnswer(int index) {
-        lastAskedIndex = index + 1;
-        return guessAnswers.get(index);
-    }
-
-    public GuessAnswer getGuessAnswer() {
-        if(lastAskedIndex < guessAnswers.size()) {
-            return guessAnswers.get(lastAskedIndex++);
-        } else {
-            lastAskedIndex = 0;
-            return null;
-        }
+    public String getArrange(int index) {
+        return arrangers.get(index).arrange();
     }
 
     public void arrangeIndexReset(int index) {
-        arrangeIndexes.set(index, 0);
-    }
-
-    public int getArrangeIndex(int index) {
-        return arrangeIndexes.get(index);
-    }
-
-    public int getArrangeIndexWithIncrement(int index) {
-        int arrangeIndex = arrangeIndexes.get(index);
-        arrangeIndexes.set(index, arrangeIndex + 1);
-        return arrangeIndex;
+        arrangers.get(index).defaultIndexReset();
     }
 
     public void arrangesReset() {
-        for(int i = 0; i < arrangeIndexes.size(); ++i) {
-            arrangeIndexes.set(i, 0);
+        for(int i = 0; i < arrangers.size(); ++i) {
+            arrangeIndexReset(i);
         }
     }
 
     private ArrayList<GuessAnswer> guessAnswers;
-    private ArrayList<Integer> arrangeIndexes;
+    private ArrayList<Arranger> arrangers;
     private ArrayList<Digits> digitsStore;
-    private int lastAskedIndex = 0;
+    private ArrayList<GuessData> guessDatas;
 }

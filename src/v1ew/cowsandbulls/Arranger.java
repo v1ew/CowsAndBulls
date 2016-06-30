@@ -66,6 +66,7 @@ public class Arranger {
     }
 
     public String arrange(int index) {
+        if(defaultIndex != (index + 1)) defaultIndex = index + 1;
         int cows = Master.cows(answer);
         int bulls = Master.bulls(answer);
         int iterations = 0;

@@ -104,7 +104,7 @@ public class Number {
         System.out.println(".");
     }
 
-    public Digit digits[];
+    private Digit digits[];
     protected int length;
 
 }

@@ -12,6 +12,8 @@ public class Digit implements Comparable<Digit> {
         free();
     }
 
+    // TODO
+    // Необходимо избавиться от этой функции. Вместо нее использовать clone()
     public void copyTo(Digit digitToCopy) {
         digitToCopy.digit = this.digit;
         digitToCopy.state = this.state;
@@ -20,8 +22,7 @@ public class Digit implements Comparable<Digit> {
             digitToCopy.positions[i] = this.positions[i];
         }
     }
-    // TODO
-    // Необходимо избавиться от этой функции. Вместо нее использовать clone()
+
     public int compareTo(Digit d) {
         if(this.digit < d.digit) return -1;
         else if(this.digit == d.digit) return 0;
@@ -75,7 +76,7 @@ public class Digit implements Comparable<Digit> {
         setState(DigitState.LOCAL_DELETED, position);
     }
 
-    public boolean setState(DigitState state, int position) {
+    private boolean setState(DigitState state, int position) {
         this.state = state;
         this.position = position;
         if(this.position < 0) {
