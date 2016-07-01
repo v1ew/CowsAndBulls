@@ -51,14 +51,10 @@ public class Guesser {
      * @param arrange распределение коров и быков в формате "0bc0", где 0 - означает, что соответствующая цифра не
      *                является значимой, b - бык, c - корова в передаваемом числе.
      * @param number число-вариант, к которому относится распределение.
-     * @param answer ответ на вариант, в виде двухзначного десятичного числа, где единицы определяют количнство
-     *               коров, а десятки - количнство быков.
      * @return Положительный ответ говорит о том, что данное распределение согласуется с текущим состоянием и его можно
      * применить, используя mergeStates.
      */
-    public boolean isArrangeCorrect(String arrange, String number, int answer) {
-        int bulls = Master.bulls(answer);
-        int cows = Master.cows(answer);
+    public boolean isArrangeCorrect(String arrange, String number) {
         Number numberDigit = new Number(number, digits);
 
         // Проверим общее поголовье, получаемое после применения этого расклада
@@ -139,11 +135,10 @@ public class Guesser {
         int storeIndex = 0;
         boolean arrangeFound = false;
         do {
-            int answer = guessStore.getAnswer(storeIndex);
             String number = guessStore.getGuess(storeIndex);
             String arrange = guessStore.getArrange(storeIndex);
             while(arrange.length() > 0) {
-                if(isArrangeCorrect(arrange, number, answer)) {
+                if(isArrangeCorrect(arrange, number)) {
                     arrangeFound = true;
                     break;
                 }
@@ -288,7 +283,7 @@ public class Guesser {
     }
 
     /**
-     * Добавляет результат новой попытки в свою "базу данных".
+     * Добавляет ответ на очередной вариант в свою "базу данных".
      * @param guess вариант числа
      * @param answer ответ на этот вариант
      */
@@ -301,7 +296,7 @@ public class Guesser {
      */
     public Digits digits;
     /**
-     * Хранилище истории вариантов и ответов, а также оперативной информации
+     * Хранилище истории вариантов и ответов, а также другой оперативной информации
      */
     private GuessStore guessStore;
     /**

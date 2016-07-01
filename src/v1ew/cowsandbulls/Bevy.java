@@ -36,13 +36,11 @@ public class Bevy {
     }
 
     public boolean isCow(int index) {
-        return cows.contains(new Integer(index));
+        return cows.contains(index);
     }
 
     public boolean addCow(int cowIndex) {
-        if(!isIndexExists(bulls, cowIndex))
-            return addAnimal(cows, cowIndex);
-        return false;
+        return !isIndexExists(bulls, cowIndex) && addAnimal(cows, cowIndex);
     }
 
     public boolean moveAnimal(ArrayList<Integer> list, int from, int to) {

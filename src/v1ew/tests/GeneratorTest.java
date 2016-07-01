@@ -1,6 +1,5 @@
 package v1ew.tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import v1ew.cowsandbulls.Generator;
 import v1ew.cowsandbulls.Master;

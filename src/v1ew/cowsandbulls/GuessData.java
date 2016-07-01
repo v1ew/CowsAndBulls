@@ -15,15 +15,29 @@ public class GuessData {
         arranger = new Arranger(answer, Guesser.NUMBER_LENGTH);
         digits = new Digits();
     }
-    // TODO
-    // Заменить класс GuessAnswer на GuessData и, вероятно, избавиться от GuessStore.
-    // Вместо него использовать ArrayList и Iterator для навигации по записям.
+
     public String getGuess() {
         return guess;
     }
 
     public int getAnswer() {
         return answer;
+    }
+
+    public void saveDigits(Digits digitsToSave) {
+        digits.copyFrom(digitsToSave);
+    }
+
+    public void restoreDigits(Digits digitsToLoad) {
+        digits.copyTo(digitsToLoad);
+    }
+
+    public String getArrange() {
+        return arranger.arrange();
+    }
+
+    public void resetArrange() {
+        arranger.restart();
     }
 
     private String guess;

@@ -7,21 +7,11 @@ public class Arranger {
     public Arranger(int answer, int length) {
         this.length = length;
         this.answer = answer;
-        defaultIndex = 0;
+        arrangeIndex = 0;
     }
 
-    public static String getArrange(int answer, int length, int index) {
-        Arranger arranger = new Arranger(answer, length);
-        return arranger.arrange(index);
-    }
-
-    public static String getArrange(int answer, int length) {
-        Arranger arranger = new Arranger(answer, length);
-        return arranger.arrange();
-    }
-
-    public void defaultIndexReset() {
-        defaultIndex = 0;
+    public void restart() {
+        arrangeIndex = 0;
     }
 
     public static String binaryString(int number) {
@@ -62,11 +52,11 @@ public class Arranger {
     }
 
     public String arrange() {
-        return arrange(defaultIndex++);
+        return arrange(arrangeIndex++);
     }
 
     public String arrange(int index) {
-        if(defaultIndex != (index + 1)) defaultIndex = index + 1;
+        if(arrangeIndex != (index + 1)) arrangeIndex = index + 1;
         int cows = Master.cows(answer);
         int bulls = Master.bulls(answer);
         int iterations = 0;
@@ -120,5 +110,5 @@ public class Arranger {
 
     private int answer;
     private int length;
-    private int defaultIndex;
+    private int arrangeIndex;
 }

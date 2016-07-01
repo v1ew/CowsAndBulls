@@ -13,7 +13,7 @@ public class Digit implements Comparable<Digit> {
     }
 
     // TODO
-    // Необходимо избавиться от этой функции. Вместо нее использовать clone()
+    // Необходимо оптимизировать эту функцию
     public void copyTo(Digit digitToCopy) {
         digitToCopy.digit = this.digit;
         digitToCopy.state = this.state;

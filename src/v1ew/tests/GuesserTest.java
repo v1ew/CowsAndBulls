@@ -31,25 +31,25 @@ public class GuesserTest {
     public void selectArrangeCheck() {
         Guesser guesser = new Guesser();
         guesser.digits.getDigit(0).setCow(0);
-        assertTrue(guesser.isArrangeCorrect("0b00", "4056", 10));
-        assertTrue(guesser.isArrangeCorrect("0c00", "4056", 10));
-        assertFalse(guesser.isArrangeCorrect("0000", "4056", 10));
-        assertFalse(guesser.isArrangeCorrect("c000", "4056", 10));
+        assertTrue(guesser.isArrangeCorrect("0b00", "4056"));
+        assertTrue(guesser.isArrangeCorrect("0c00", "4056"));
+        assertFalse(guesser.isArrangeCorrect("0000", "4056"));
+        assertFalse(guesser.isArrangeCorrect("c000", "4056"));
 
         guesser.digits.getDigit(0).setBull(0);
-        assertFalse(guesser.isArrangeCorrect("b000", "4056", 10)); // реальный бык в другом месте не корова
-        assertFalse(guesser.isArrangeCorrect("bc00", "4056", 11)); // на месте реального быка другой бык
-        assertFalse(guesser.isArrangeCorrect("cb00", "4056", 11)); // бык стал быком на другом месте
+        assertFalse(guesser.isArrangeCorrect("b000", "4056")); // реальный бык в другом месте не корова
+        assertFalse(guesser.isArrangeCorrect("bc00", "4056")); // на месте реального быка другой бык
+        assertFalse(guesser.isArrangeCorrect("cb00", "4056")); // бык стал быком на другом месте
 
         guesser.digits.getDigit(0).setBull(1);
-        assertFalse(guesser.isArrangeCorrect("b000", "4056", 10));
-        assertTrue(guesser.isArrangeCorrect("0b00", "4056", 10));
+        assertFalse(guesser.isArrangeCorrect("b000", "4056"));
+        assertTrue(guesser.isArrangeCorrect("0b00", "4056"));
         guesser.digits.getDigit(9).setCow(3);
         guesser.digits.getDigit(8).setCow(3);
         guesser.digits.getDigit(7).setCow(3);
-        assertTrue(guesser.isArrangeCorrect("0b00", "4056", 10));
+        assertTrue(guesser.isArrangeCorrect("0b00", "4056"));
         guesser.digits.getDigit(3).setCow(3);
-        assertFalse(guesser.isArrangeCorrect("0b00", "4056", 10));
+        assertFalse(guesser.isArrangeCorrect("0b00", "4056"));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class GuesserTest {
         assertEquals("2354", guess);
 
         answer = master.ask(guess);
-        assertEquals(03, answer);
+        assertEquals(3, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
         assertEquals("3246", guess);

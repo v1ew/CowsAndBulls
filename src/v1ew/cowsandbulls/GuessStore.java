@@ -7,43 +7,28 @@ import java.util.ArrayList;
  */
 public class GuessStore {
     public GuessStore() {
-        guessAnswers = new ArrayList<>();
-        digitsStore = new ArrayList<>();
-        arrangers = new ArrayList<>();
-        guessDatas = new ArrayList<>();
+        dataArrayList = new ArrayList<>();
     }
 
     public void saveDigits(int index, Digits digitsToSave) {
-        Digits digits = digitsStore.get(index);
-        digits.reset();
-        for(int i = 0; i < digits.getLength(); ++i) {
-            digitsToSave.getDigit(i).copyTo(digits.getDigit(i));
-        }
-
+        dataArrayList.get(index).saveDigits(digitsToSave);
     }
 
-    public void restoreDigits(int index, Digits digits) {
-        Digits digitsFromLoad = digitsStore.get(index);
-        digits.reset();
-        for(int i = 0; i < digits.getLength(); ++i) {
-            digitsFromLoad.getDigit(i).copyTo(digits.getDigit(i));
-        }
+    public void restoreDigits(int index, Digits digitsToLoad) {
+        dataArrayList.get(index).restoreDigits(digitsToLoad);
     }
 
     public void saveGuess(String guess, int answer) {
-        guessAnswers.add(new GuessAnswer(guess, answer));
-        arrangers.add(new Arranger(answer, Guesser.NUMBER_LENGTH));
-        digitsStore.add(new Digits());
-        guessDatas.add(new GuessData(guess, answer));
+        dataArrayList.add(new GuessData(guess, answer));
     }
 
     public int guessCount() {
-        return guessAnswers.size();
+        return dataArrayList.size();
     }
 
     public boolean isGuessNew(String guess) {
-        for(int i = 0; i < guessAnswers.size(); ++i) {
-            if(guessAnswers.get(i).getGuess().equals(guess)) {
+        for(GuessData guessData: dataArrayList) {
+            if(guessData.getGuess().equals(guess)) {
                 return false;
             }
         }
@@ -51,29 +36,26 @@ public class GuessStore {
     }
 
     public String getGuess(int index) {
-        return guessAnswers.get(index).getGuess();
+        return dataArrayList.get(index).getGuess();
     }
 
     public int getAnswer(int index) {
-        return guessAnswers.get(index).getAnswer();
+        return dataArrayList.get(index).getAnswer();
     }
 
     public String getArrange(int index) {
-        return arrangers.get(index).arrange();
+        return dataArrayList.get(index).getArrange();
     }
 
     public void arrangeIndexReset(int index) {
-        arrangers.get(index).defaultIndexReset();
+        dataArrayList.get(index).resetArrange();
     }
 
     public void arrangesReset() {
-        for(int i = 0; i < arrangers.size(); ++i) {
+        for(int i = 0; i < dataArrayList.size(); ++i) {
             arrangeIndexReset(i);
         }
     }
 
-    private ArrayList<GuessAnswer> guessAnswers;
-    private ArrayList<Arranger> arrangers;
-    private ArrayList<Digits> digitsStore;
-    private ArrayList<GuessData> guessDatas;
+    private ArrayList<GuessData> dataArrayList;
 }

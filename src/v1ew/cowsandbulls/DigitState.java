@@ -5,10 +5,8 @@ package v1ew.cowsandbulls;
  */
 public enum DigitState {
     FREE("Free"),
-    USED("Used"),
     BULL("Bull"),
     COW("Cow"),
-    GLOBAL_DELETED("GD"),
     LOCAL_DELETED("LD");
 
     DigitState(String name) {
