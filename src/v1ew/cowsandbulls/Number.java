@@ -105,6 +105,6 @@ public class Number {
     }
 
     protected Digit digits[];
-    protected int length;
+    private int length;
 
 }

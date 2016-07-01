@@ -183,13 +183,9 @@ public class Guesser {
         boolean freeDigitUsed[] = new boolean[DIGITS_LENGTH];
 
         // Расставляем по местам всех быков
-        for (int guessDigitIndex = 0; guessDigitIndex < NUMBER_LENGTH; ++guessDigitIndex) {
-            for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
-                if (digits.getDigit(digitsIndex).isBull(guessDigitIndex)) {
-                    guessDigits[guessDigitIndex] = digits.getDigit(digitsIndex);
-                    break;
-                }
-            }
+        for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
+            if (digits.getDigit(digitsIndex).isBull())
+                guessDigits[digits.getDigit(digitsIndex).getPosition()] = digits.getDigit(digitsIndex);
         }
         // Теперь пытаемся расставить всех коров
         switch (digits.cowsCount()) {
@@ -259,11 +255,13 @@ public class Guesser {
         }
         // Расставляем оставшиеся цифры
         for (int guessDigitIndex = 0; guessDigitIndex < NUMBER_LENGTH; ++guessDigitIndex) {
-            for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
-                if(digits.getDigit(digitsIndex).isFree() && !freeDigitUsed[digitsIndex] && guessDigits[guessDigitIndex] == null) {
-                    guessDigits[guessDigitIndex] = digits.getDigit(digitsIndex);
-                    freeDigitUsed[digitsIndex] = true;
-                    break;
+            if(guessDigits[guessDigitIndex] == null) {
+                for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
+                    if (digits.getDigit(digitsIndex).isFree() && !freeDigitUsed[digitsIndex]) {
+                        guessDigits[guessDigitIndex] = digits.getDigit(digitsIndex);
+                        freeDigitUsed[digitsIndex] = true;
+                        break;
+                    }
                 }
             }
         }

@@ -23,4 +23,24 @@ public class CowsAndBullsGame {
         } while(answer < 40);
         return counter;
     }
+
+    public static void main(String[] args) {
+        String number = "";
+        CowsAndBullsGame game = new CowsAndBullsGame();
+        if(args.length == 0) {
+            Generator generator = new Generator(Guesser.NUMBER_LENGTH);
+            number = generator.generate();
+            game.usage();
+        } else {
+            number = args[0];
+        }
+
+        game.start(number);
+    }
+
+    public void usage() {
+        System.out.println("Usage:");
+        System.out.println("game 1234");
+        System.out.println("Out for example:");
+    }
 }
