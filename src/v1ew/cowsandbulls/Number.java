@@ -91,7 +91,7 @@ public class Number {
         return length;
     }
 
-    public void reset() {
+    public void freeAll() {
         for(int i = 0; i < length; ++i) {
             digits[i].free();
         }

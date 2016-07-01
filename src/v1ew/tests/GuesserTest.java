@@ -55,24 +55,24 @@ public class GuesserTest {
     @Test
     public void tryToMakeGuess1Check() {
         Guesser guesser = new Guesser();
-        assertEquals("0123", guesser.tryToMakeGuess());
+        assertEquals("0123", guesser.guess());
         guesser.saveAnswer("0123", 4);
-        guesser.guess();
-        assertEquals("1032", guesser.tryToMakeGuess());
+        String guess = guesser.guess();
+        assertEquals("1032", guess);
         guesser.saveAnswer("1032", 4);
-        guesser.guess();
-        assertEquals("2301", guesser.tryToMakeGuess());
+        guess = guesser.guess();
+        assertEquals("2301", guess);
         guesser.saveAnswer("2301", 4);
-        guesser.guess();
-        assertEquals("3210", guesser.tryToMakeGuess());
+        guess = guesser.guess();
+        assertEquals("3210", guess);
     }
 
     @Test
     public void tryToMakeGuess2Check() {
         Guesser guesser = new Guesser();
         guesser.saveAnswer("0123", 12);
-        guesser.guess();
-        assertEquals("2413", guesser.tryToMakeGuess());
+        String guess = guesser.guess();
+        assertEquals("2413", guess);
     }
 
     @Test

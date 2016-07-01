@@ -38,7 +38,7 @@ public class GuessDataTest {
         Digits digits = new Digits();
         digits.getDigit(1).setBull(2);
         guessData.saveDigits(digits);
-        digits.reset();
+        digits.freeAll();
         assertTrue(digits.getDigit(1).isFree());
         guessData.restoreDigits(digits);
         assertTrue(digits.getDigit(1).isBull(2));

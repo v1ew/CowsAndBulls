@@ -9,7 +9,7 @@ public class Digits extends Number {
     }
 
     public void copyFrom(Digits digitsToSave) {
-        reset();
+        freeAll();
         for(int i = 0; i < Guesser.DIGITS_LENGTH; ++i) {
             digitsToSave.getDigit(i).copyTo(digits[i]);
         }
@@ -17,11 +17,9 @@ public class Digits extends Number {
     }
 
     public void copyTo(Digits digitsToLoad) {
-        digitsToLoad.reset();
+        digitsToLoad.freeAll();
         for(int i = 0; i < Guesser.DIGITS_LENGTH; ++i) {
             digits[i].copyTo(digitsToLoad.getDigit(i));
         }
     }
-
-
 }

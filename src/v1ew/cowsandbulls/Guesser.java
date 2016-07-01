@@ -129,47 +129,42 @@ public class Guesser {
         if(guessStore.guessCount() == 0)
             return tryToMakeGuess();
 
-        guessStore.arrangesReset();
-        digits.reset();
+        guessStore.restart();
+        digits.freeAll();
 
-        int storeIndex = 0;
         boolean arrangeFound = false;
         do {
-            String number = guessStore.getGuess(storeIndex);
-            String arrange = guessStore.getArrange(storeIndex);
+            String number = guessStore.getGuess();
+            String arrange = guessStore.getArrange();
             while(arrange.length() > 0) {
                 if(isArrangeCorrect(arrange, number)) {
                     arrangeFound = true;
                     break;
                 }
-                arrange = guessStore.getArrange(storeIndex);
+                arrange = guessStore.getArrange();
             }
             if(arrangeFound) {
-                guessStore.saveDigits(storeIndex, digits);
+                arrangeFound = false;
+                guessStore.saveDigits(digits);
                 mergeStates(number, arrange);
 
-                if(storeIndex+1 < guessStore.guessCount()) {
-                    storeIndex++;
-                    arrangeFound = false;
+                if(guessStore.hasNext()) {
+                    guessStore.moveNext();
+                } else {
+                    newGuessString = tryToMakeGuess();
+                    guessStore.restoreDigits(digits); // need if newGuessString.length() < NUMBER_LENGTH
                 }
             } else {
-                guessStore.arrangeIndexReset(storeIndex);
-                if(storeIndex > 0) {
-                    storeIndex--;
-                    guessStore.restoreDigits(storeIndex, digits);
+                guessStore.arrangeIndexReset();
+                if(guessStore.hasPrev()) {
+                    guessStore.movePrev();
+                    guessStore.restoreDigits(digits);
                 } else {
                     System.err.println("Решение не найдено!");
                     System.exit(0);
                 }
             }
-            if(arrangeFound) {
-                newGuessString = tryToMakeGuess();
-                if(newGuessString.length() < NUMBER_LENGTH) {
-                    arrangeFound = false;
-                    guessStore.restoreDigits(storeIndex, digits);
-                }
-            }
-        } while(!arrangeFound);
+        } while(newGuessString.length() < NUMBER_LENGTH);
 
         return newGuessString;
     }
@@ -182,7 +177,7 @@ public class Guesser {
      * одной позиции.
      * @return Возвращает новый вариант, который может оказаться не полным из-за недостатка свободных цифр.
      */
-    public String tryToMakeGuess() {
+    private String tryToMakeGuess() {
         String guessString = "";
         Digit guessDigits[] = new Digit[NUMBER_LENGTH];
         boolean freeDigitUsed[] = new boolean[DIGITS_LENGTH];

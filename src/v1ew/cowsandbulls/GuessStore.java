@@ -10,12 +10,30 @@ public class GuessStore {
         dataArrayList = new ArrayList<>();
     }
 
-    public void saveDigits(int index, Digits digitsToSave) {
-        dataArrayList.get(index).saveDigits(digitsToSave);
+    public boolean hasNext() {
+        return (storeIndex + 1) < dataArrayList.size();
     }
 
-    public void restoreDigits(int index, Digits digitsToLoad) {
-        dataArrayList.get(index).restoreDigits(digitsToLoad);
+    public boolean hasPrev() {
+        return storeIndex > 0;
+    }
+
+    public void moveNext() {
+        if(hasNext())
+            storeIndex++;
+    }
+
+    public void movePrev() {
+        if(hasPrev())
+            storeIndex--;
+    }
+
+    public void saveDigits(Digits digitsToSave) {
+        dataArrayList.get(storeIndex).saveDigits(digitsToSave);
+    }
+
+    public void restoreDigits(Digits digitsToLoad) {
+        dataArrayList.get(storeIndex).restoreDigits(digitsToLoad);
     }
 
     public void saveGuess(String guess, int answer) {
@@ -35,27 +53,29 @@ public class GuessStore {
         return true;
     }
 
-    public String getGuess(int index) {
-        return dataArrayList.get(index).getGuess();
+    public String getGuess() {
+        return dataArrayList.get(storeIndex).getGuess();
     }
 
-    public int getAnswer(int index) {
-        return dataArrayList.get(index).getAnswer();
+    public int getAnswer() {
+        return dataArrayList.get(storeIndex).getAnswer();
     }
 
-    public String getArrange(int index) {
-        return dataArrayList.get(index).getArrange();
+    public String getArrange() {
+        return dataArrayList.get(storeIndex).getArrange();
     }
 
-    public void arrangeIndexReset(int index) {
-        dataArrayList.get(index).resetArrange();
+    public void arrangeIndexReset() {
+        dataArrayList.get(storeIndex).resetArrange();
     }
 
-    public void arrangesReset() {
-        for(int i = 0; i < dataArrayList.size(); ++i) {
-            arrangeIndexReset(i);
+    public void restart() {
+        storeIndex = 0;
+        for(GuessData guessData: dataArrayList) {
+            guessData.resetArrange();
         }
     }
 
     private ArrayList<GuessData> dataArrayList;
+    private int storeIndex = 0;
 }

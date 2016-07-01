@@ -50,7 +50,7 @@ public class Digit implements Comparable<Digit> {
         return state == DigitState.COW;
     }
 
-    // Возвращает, стояла ли корова на указанном месте
+    // Возвращает, стояла ли корова на указанном месте ранее
     // Не обязательно, то место, где она сейчас стоит
     public boolean isCow(int position) {
         return state == DigitState.COW && this.positions[position];
