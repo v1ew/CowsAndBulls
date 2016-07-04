@@ -2,8 +2,14 @@ package v1ew.cowsandbulls;
 
 /**
  * Created by Shakhov on 16.06.2016.
+ * Представляет число, заданной длины.
+ * Каждая цифра может иметь состояние и позицию в загаданном числе.
  */
 public class Number {
+    /**
+     * Создает число из цифр подряд от 0 до length-1
+     * @param length длина создаваемого числа
+     */
     public Number(int length) {
         this.length = length;
         digits = new Digit[length];
@@ -12,6 +18,12 @@ public class Number {
         }
     }
 
+    /**
+     * Создает число на основе строки из цифр, где цифры отображаются на общий набор цифр, отражающий состояние.
+     * В будущем изменения состояний цифр сразу отразятся в общем наборе цифр.
+     * @param numberString строка, представляющая число
+     * @param allDigits общий набор цифр
+     */
     public Number(String numberString, Digits allDigits) {
         length = numberString.length();
         digits = new Digit[length];
@@ -23,6 +35,10 @@ public class Number {
         }
     }
 
+    /**
+     * Создает число на основе строки из цифр. Каждая цифра - объект Digit.
+     * @param numberString строка, представляющая число
+     */
     public Number(String numberString) {
         length = numberString.length();
         digits = new Digit[length];

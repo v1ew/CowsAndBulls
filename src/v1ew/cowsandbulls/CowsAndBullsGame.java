@@ -7,8 +7,6 @@ public class CowsAndBullsGame {
     public CowsAndBullsGame() {
     }
 
-    // TODO
-    // Реализовать проверку введенного числа на повторение цифр и их количество
     public static int start(String number) {
         String guess;
         System.out.println("Number is: " + number);

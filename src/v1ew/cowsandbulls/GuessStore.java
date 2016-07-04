@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Shakhov on 21.06.2016.
+ * Предоставляет итератор по базе вариантов и ответов.
  */
 public class GuessStore {
     public GuessStore() {
