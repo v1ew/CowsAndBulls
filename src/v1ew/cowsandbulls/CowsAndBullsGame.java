@@ -7,6 +7,8 @@ public class CowsAndBullsGame {
     public CowsAndBullsGame() {
     }
 
+    // TODO
+    // Реализовать проверку введенного числа на повторение цифр и их количество
     public static int start(String number) {
         String guess;
         System.out.println("Number is: " + number);
@@ -27,7 +29,7 @@ public class CowsAndBullsGame {
     public static void main(String[] args) {
         String number = "";
         CowsAndBullsGame game = new CowsAndBullsGame();
-        if(args.length == 0) {
+        if(args.length == 0 || !isCorrectNumber(args[0])) {
             Generator generator = new Generator(Guesser.NUMBER_LENGTH);
             number = generator.generate();
             game.usage();
@@ -40,7 +42,32 @@ public class CowsAndBullsGame {
 
     public void usage() {
         System.out.println("Usage:");
-        System.out.println("game 1234");
+        System.out.println("CowsAndBullsGame 1234");
         System.out.println("Out for example:");
     }
+
+    private static boolean isCorrectNumber(String number) {
+        if(number.length() != Guesser.NUMBER_LENGTH)
+            return false;
+        String allDigits = "0123456789";
+        for(char ch: number.toCharArray()) {
+            if(allDigits.indexOf(ch, 0) < 0)
+                return false;
+        }
+        return isNumberDigitsUnique(number);
+    }
+
+    public static boolean isNumberDigitsUnique(String number) {
+        int len = number.length();
+        for(int i = 0; i < len; ++i) {
+            char ch = number.charAt(i);
+            for(int j = i+1; j < len; ++j) {
+                if(ch == number.charAt(j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
