@@ -1,9 +1,9 @@
 package v1ew.tests;
 
 import org.junit.Test;
-import v1ew.cowsandbulls.CowsAndBullsGame;
 import v1ew.cowsandbulls.Generator;
 import v1ew.cowsandbulls.Master;
+import v1ew.cowsandbulls.Helper;
 
 import static org.junit.Assert.*;
 
@@ -27,17 +27,17 @@ public class GeneratorTest {
     @Test
     public void generatorUniqueCheck() {
         Generator generator = new Generator(4);
-        assertEquals(CowsAndBullsGame.isNumberDigitsUnique(generator.generate()), true);
-        assertEquals(CowsAndBullsGame.isNumberDigitsUnique(generator.generate()), true);
-        assertEquals(CowsAndBullsGame.isNumberDigitsUnique(generator.generate()), true);
+        assertEquals(Helper.isNumberDigitsUnique(generator.generate()), true);
+        assertEquals(Helper.isNumberDigitsUnique(generator.generate()), true);
+        assertEquals(Helper.isNumberDigitsUnique(generator.generate()), true);
     }
 
     @Test
     public void numberDigitsUniqueCheck() {
-        assertFalse(CowsAndBullsGame.isNumberDigitsUnique("122567"));
-        assertTrue(CowsAndBullsGame.isNumberDigitsUnique("23548"));
-        assertFalse(CowsAndBullsGame.isNumberDigitsUnique("987659"));
-        assertTrue(CowsAndBullsGame.isNumberDigitsUnique("85371"));
+        assertFalse(Helper.isNumberDigitsUnique("122567"));
+        assertTrue(Helper.isNumberDigitsUnique("23548"));
+        assertFalse(Helper.isNumberDigitsUnique("987659"));
+        assertTrue(Helper.isNumberDigitsUnique("85371"));
     }
 
     @Test(timeout=1000)

@@ -41,13 +41,7 @@ public class Number {
      */
     public Number(String numberString) {
         length = numberString.length();
-        digits = new Digit[length];
-        int digitInt = Integer.parseInt(numberString);
-        for(int i = numberString.length() - 1; i >= 0; --i) {
-            int rest = digitInt % 10;
-            digits[i] = new Digit(rest);
-            digitInt /= 10;
-        }
+        digits = Helper.stringToDigits(numberString);
     }
 
     public void setDigit(int index, Digit digit) {
@@ -67,22 +61,14 @@ public class Number {
         return result;
     }
 
-    public String allNotBulls() {
+    public String nextFreeDigits(int howMuch) {
         String result = "";
-        for(int i = 0; i < length; ++i) {
-            if(digits[i].isCow() || digits[i].isFree())
-                result += digits[i].getDigitString();
+        for(Digit digit: digits) {
+            if(digit.isFree() && howMuch-- > 0) {
+                result += digit.getDigit();
+            }
         }
         return result;
-    }
-
-    public int freeCount() {
-        int counter = 0;
-        for(int i = 0; i < length; ++i) {
-            if(digits[i].isFree())
-                counter++;
-        }
-        return counter;
     }
 
     public int cowsCount() {

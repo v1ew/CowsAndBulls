@@ -72,7 +72,7 @@ public class GuesserTest {
         Guesser guesser = new Guesser();
         guesser.saveAnswer("0123", 12);
         String guess = guesser.guess();
-        assertEquals("2413", guess);
+        assertEquals("1243", guess);
     }
 
     @Test
@@ -116,16 +116,16 @@ public class GuesserTest {
         assertEquals(2, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
-        assertEquals("2354", guess);
+        assertEquals("2345", guess);
 
         answer = master.ask(guess);
         assertEquals(3, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
-        assertEquals("3246", guess);
+        assertEquals("3256", guess);
 
         answer = master.ask(guess);
-        assertEquals(3, answer);
+        assertEquals(2, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
         assertEquals("4732", guess);
@@ -148,7 +148,7 @@ public class GuesserTest {
         assertEquals(2, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
-        assertEquals("2354", guess);
+        assertEquals("2345", guess);
 
         answer = master.ask(guess);
         assertEquals(2, answer);
@@ -242,10 +242,16 @@ public class GuesserTest {
         assertEquals(10, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
-        assertEquals("5762", guess);
+        assertEquals("5267", guess);
 
         answer = master.ask(guess);
-        assertEquals(30, answer);
+        assertEquals(21, answer);
+        guesser.saveAnswer(guess, answer);
+        guess = guesser.guess();
+        assertEquals("5617", guess);
+
+        answer = master.ask(guess);
+        assertEquals(13, answer);
         guesser.saveAnswer(guess, answer);
         guess = guesser.guess();
         assertEquals("5761", guess);

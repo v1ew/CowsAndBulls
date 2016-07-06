@@ -4,41 +4,59 @@ import java.util.Arrays;
 
 /**
  * Created by Shakhov on 23.06.2016.
+ * Перестановщик сортирует заданный набор цифр и перебирает все возможные перестановки
  */
 public class Permutator {
+    /**
+     * Конструктор, принимает массив
+     * @param digits набор цифр в виде массива объекьлв Digit
+     */
+    public Permutator(Digit[] digits) {
+        digitsArray = digits;
+        length = digitsArray.length;
+    }
+
+    /**
+     * Конструктор, принимает строку
+     * @param number набор цифр в виде строки
+     */
     public Permutator(String number) {
-        length = number.length();
-        numbers = new Digit[length];
-        for(int i = 0; i < length; ++i) {
-            int x = Integer.parseInt(number.charAt(i) + "");
-            numbers[i] = new Digit(x);
-        }
+        this(Helper.stringToDigits(number));
     }
 
+    /**
+     * Меняет местами значения двух ячеек массива
+     * @param first индекс первой ячейки
+     * @param second индекс второй ячейки
+     */
     public void swap(int first, int second) {
-        Digit temp = numbers[first];
-        numbers[first] = numbers[second];
-        numbers[second] = temp;
+        Digit temp = digitsArray[first];
+        digitsArray[first] = digitsArray[second];
+        digitsArray[second] = temp;
     }
 
-    public void sort() {
-        Arrays.sort(numbers);
-    }
-
+    /**
+     * Возвращает следующую перестановку или пустую строку, если список перестановок исчерпан
+     * @return перестановка в виде строки
+     */
     public String nextPerm() {
+        if(firstPerm) {
+            firstPerm = false;
+            Arrays.sort(digitsArray);
+            return toString();
+        }
         int first = length - 2;
-        while(first != -1 && numbers[first].getDigit() >= numbers[first + 1].getDigit()) first--;
-        //            sort();
+        while(first != -1 && digitsArray[first].getDigit() >= digitsArray[first + 1].getDigit()) first--;
         if(first > -1) {
             int second = length - 1;
-            while (numbers[first].getDigit() >= numbers[second].getDigit()) second--;
+            while (digitsArray[first].getDigit() >= digitsArray[second].getDigit()) second--;
             swap(first, second);
             int left = first + 1;
             int right = length - 1;
             while (left < right)
                 swap(left++, right--);
         } else {
-            sort();
+            return "";
         }
 
         return toString();
@@ -47,11 +65,12 @@ public class Permutator {
     public String toString() {
         String result = "";
         for(int i = 0; i < length; ++i) {
-            result += numbers[i].getDigit();
+            result += digitsArray[i].getDigit();
         }
         return result;
     }
 
-    private Digit numbers[];
+    private Digit digitsArray[];
     private int length;
+    private boolean firstPerm = true;
 }

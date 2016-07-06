@@ -187,7 +187,7 @@ public class Guesser {
             if (digits.getDigit(digitsIndex).isBull())
                 guessDigits[digits.getDigit(digitsIndex).getPosition()] = digits.getDigit(digitsIndex);
         }
-        // Теперь пытаемся расставить всех коров
+        // Теперь пытаемся расставить всех коров и заполнить оставшиеся места
         switch (digits.cowsCount()) {
             case 0:
                 break;
@@ -205,24 +205,12 @@ public class Guesser {
                 }
                 break;
             default: // 2-3-4 cows
-                String firstPerm = null;
                 String allCows = digits.allCows();
-                int freeCount = 0;
-                // Дополняем список коров незадействованными цифрами
-                while(allCows.length() + digits.bullsCount() < NUMBER_LENGTH && freeCount++ < digits.freeCount()) {
-                    for(int i = 0; i < DIGITS_LENGTH; ++i) {
-                        if(digits.getDigit(i).isFree() && !freeDigitUsed[i]) {
-                            allCows += digits.getDigit(i).getDigitString();
-                            freeDigitUsed[i] = true;
-                            break;
-                        }
-                    }
-                }
+                allCows += digits.nextFreeDigits(NUMBER_LENGTH - (allCows.length() + digits.bullsCount()));
+                // Расставляя цифры, используем перестановки, чтобы не повторяться
                 Permutator permutator = new Permutator(allCows);
                 String perm = permutator.nextPerm();
-                while(!perm.equals(firstPerm)){
-                    if(firstPerm == null)
-                        firstPerm = perm;
+                while(perm.length() > 0){
                     Number number = new Number(perm);
                     int sedCowsCount = 0;
                     checkPermStart:
@@ -253,7 +241,7 @@ public class Guesser {
                 }
                 break;
         }
-        // Расставляем оставшиеся цифры
+        // Расставляем оставшиеся цифры, при необходимости
         for (int guessDigitIndex = 0; guessDigitIndex < NUMBER_LENGTH; ++guessDigitIndex) {
             if(guessDigits[guessDigitIndex] == null) {
                 for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {

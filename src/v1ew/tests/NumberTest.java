@@ -18,4 +18,12 @@ public class NumberTest {
         assertTrue(number.getDigit(3).equals(7));
     }
 
+    @Test
+    public void nextFreeDigitsCheck() {
+        Number number = new Number(10);
+        number.getDigit(0).delete();
+        number.getDigit(1).setBull(0);
+        number.getDigit(2).setCow(3);
+        assertEquals("34", number.nextFreeDigits(2));
+    }
 }
