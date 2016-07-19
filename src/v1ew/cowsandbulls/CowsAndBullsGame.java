@@ -9,15 +9,21 @@ public class CowsAndBullsGame {
 
     public static int start(String number) {
         String guess;
+        GuessStore guessStore = new GuessStore();
         System.out.println("Number is: " + number);
         Master master = new Master(number);
         Guesser guesser = new Guesser();
         int answer;
         int counter = 0;
         do {
-            guess = guesser.guess();
+            try {
+                guess = guesser.guess(guessStore);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                return -1;
+            }
             answer = master.ask(guess);
-            guesser.saveAnswer(guess, answer);
+            guessStore.saveGuess(guess, answer);
             System.out.println(++counter + ". Guess is: " + guess +
                     ", answer is: cows - " + Master.cows(answer) + ", bulls - " + Master.bulls(answer));
         } while(answer < 40);

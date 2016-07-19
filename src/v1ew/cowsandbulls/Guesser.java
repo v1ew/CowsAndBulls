@@ -14,7 +14,6 @@ public class Guesser {
      */
     public Guesser() {
         digits = new Digits();
-        guessStore = new GuessStore();
     }
 
     /**
@@ -123,7 +122,7 @@ public class Guesser {
      * @return Возвращает новый вариант в виде числа, представленного строкой. При невозможности сгенерировать
      * новый вариант, пока вызывает System.exit(0). В дальнейшем будет исправлено на генерацию исключения.
      */
-    public String guess() {
+    public String guess(GuessStore guessStore) throws Exception {
         String newGuessString = "";
 
         if(guessStore.guessCount() == 0)
@@ -160,8 +159,7 @@ public class Guesser {
                     guessStore.movePrev();
                     guessStore.restoreDigits(digits);
                 } else {
-                    System.err.println("Решение не найдено!");
-                    System.exit(0);
+                    throw new Exception("Решение не найдено!");
                 }
             }
         } while(newGuessString.length() < NUMBER_LENGTH);
@@ -264,22 +262,9 @@ public class Guesser {
     }
 
     /**
-     * Добавляет ответ на очередной вариант в свою "базу данных".
-     * @param guess вариант числа
-     * @param answer ответ на этот вариант
-     */
-    public void saveAnswer(String guess, int answer) {
-        guessStore.saveGuess(guess, answer);
-    }
-
-    /**
      * Набор цифр, хранящий текущее состояние в процессе анализа истории вариантов и ответов
      */
     public Digits digits;
-    /**
-     * Хранилище истории вариантов и ответов, а также другой оперативной информации
-     */
-    private GuessStore guessStore;
     /**
      * Количество цифр в загадываемом числе.
      */
