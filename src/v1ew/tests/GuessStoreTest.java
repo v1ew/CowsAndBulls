@@ -19,14 +19,6 @@ public class GuessStoreTest {
         assertEquals(2, guessStore.guessCount());
         assertTrue(guessStore.isGuessNew("6789"));
         assertFalse(guessStore.isGuessNew("4567"));
-        GuessAnswer guessAnswer = guessStore.getGuessAnswer();
-        assertEquals("0123", guessAnswer.getGuess());
-        assertEquals(10, guessAnswer.getAnswer());
-        guessAnswer = guessStore.getGuessAnswer();
-        assertEquals("4567", guessAnswer.getGuess());
-        assertEquals(21, guessAnswer.getAnswer());
-        guessAnswer = guessStore.getGuessAnswer();
-        assertNull(guessAnswer);
     }
 
     @Test
@@ -40,26 +32,26 @@ public class GuessStoreTest {
         digits.getDigit(digitIndex).setBull(3);
         assertEquals(3, digits.getDigit(digitIndex).getPosition());
         assertEquals(DigitState.BULL, digits.getDigit(digitIndex).getState());
-        guessStore.saveDigits(0, digits);
+        guessStore.saveDigits(digits);
         assertEquals(3, digits.getDigit(digitIndex).getPosition());
         assertEquals(DigitState.BULL, digits.getDigit(digitIndex).getState());
-        digits.reset();
+        digits.freeAll();
         assertEquals(-1, digits.getDigit(digitIndex).getPosition());
         assertEquals(DigitState.FREE, digits.getDigit(digitIndex).getState());
-        guessStore.restoreDigits(0, digits);
+        guessStore.restoreDigits(digits);
         assertEquals(3, digits.getDigit(digitIndex).getPosition());
         assertEquals(DigitState.BULL, digits.getDigit(digitIndex).getState());
         digits.getDigit(1).setCow(2);
         digits.getDigit(0).setCow(1);
-        guessStore.saveDigits(0, digits);
+        guessStore.saveDigits(digits);
         assertEquals(2, digits.getDigit(1).getPosition());
         assertEquals(DigitState.COW, digits.getDigit(1).getState());
         assertEquals(1, digits.getDigit(0).getPosition());
         assertEquals(DigitState.COW, digits.getDigit(0).getState());
-        digits.reset();
+        digits.freeAll();
         assertEquals(-1, digits.getDigit(0).getPosition());
         assertEquals(DigitState.FREE, digits.getDigit(0).getState());
-        guessStore.restoreDigits(0, digits);
+        guessStore.restoreDigits(digits);
         assertEquals(2, digits.getDigit(1).getPosition());
         assertEquals(DigitState.COW, digits.getDigit(1).getState());
         assertEquals(1, digits.getDigit(0).getPosition());

@@ -14,7 +14,6 @@ public class Guesser {
      */
     public Guesser() {
         digits = new Digits();
-        guessStore = new GuessStore();
     }
 
     /**
@@ -51,14 +50,10 @@ public class Guesser {
      * @param arrange распределение коров и быков в формате "0bc0", где 0 - означает, что соответствующая цифра не
      *                является значимой, b - бык, c - корова в передаваемом числе.
      * @param number число-вариант, к которому относится распределение.
-     * @param answer ответ на вариант, в виде двухзначного десятичного числа, где единицы определяют количнство
-     *               коров, а десятки - количнство быков.
      * @return Положительный ответ говорит о том, что данное распределение согласуется с текущим состоянием и его можно
      * применить, используя mergeStates.
      */
-    public boolean isArrangeCorrect(String arrange, String number, int answer) {
-        int bulls = Master.bulls(answer);
-        int cows = Master.cows(answer);
+    public boolean isArrangeCorrect(String arrange, String number) {
         Number numberDigit = new Number(number, digits);
 
         // Проверим общее поголовье, получаемое после применения этого расклада
@@ -127,55 +122,47 @@ public class Guesser {
      * @return Возвращает новый вариант в виде числа, представленного строкой. При невозможности сгенерировать
      * новый вариант, пока вызывает System.exit(0). В дальнейшем будет исправлено на генерацию исключения.
      */
-    public String guess() {
+    public String guess(GuessStore guessStore) throws Exception {
         String newGuessString = "";
 
         if(guessStore.guessCount() == 0)
             return tryToMakeGuess();
 
-        guessStore.arrangesReset();
-        digits.reset();
+        guessStore.restart();
+        digits.freeAll();
 
-        int storeIndex = 0;
         boolean arrangeFound = false;
         do {
-            int answer = guessStore.getAnswer(storeIndex);
-            String number = guessStore.getGuess(storeIndex);
-            Arranger arranger = new Arranger(answer, NUMBER_LENGTH);
-            String arrange = arranger.arrange(guessStore.getArrangeIndexWithIncrement(storeIndex));
+            String number = guessStore.getGuess();
+            String arrange = guessStore.getArrange();
             while(arrange.length() > 0) {
-                if(isArrangeCorrect(arrange, number, answer)) {
+                if(isArrangeCorrect(arrange, number)) {
                     arrangeFound = true;
                     break;
                 }
-                arrange = arranger.arrange(guessStore.getArrangeIndexWithIncrement(storeIndex));
+                arrange = guessStore.getArrange();
             }
             if(arrangeFound) {
-                guessStore.saveDigits(storeIndex, digits);
+                arrangeFound = false;
+                guessStore.saveDigits(digits);
                 mergeStates(number, arrange);
 
-                if(storeIndex+1 < guessStore.guessCount()) {
-                    storeIndex++;
-                    arrangeFound = false;
+                if(guessStore.hasNext()) {
+                    guessStore.moveNext();
+                } else {
+                    newGuessString = tryToMakeGuess();
+                    guessStore.restoreDigits(digits); // need if newGuessString.length() < NUMBER_LENGTH
                 }
             } else {
-                guessStore.arrangeIndexReset(storeIndex);
-                if(storeIndex > 0) {
-                    storeIndex--;
-                    guessStore.restoreDigits(storeIndex, digits);
+                guessStore.arrangeIndexReset();
+                if(guessStore.hasPrev()) {
+                    guessStore.movePrev();
+                    guessStore.restoreDigits(digits);
                 } else {
-                    System.err.println("Решение не найдено!");
-                    System.exit(0);
+                    throw new Exception("Решение не найдено!");
                 }
             }
-            if(arrangeFound) {
-                newGuessString = tryToMakeGuess();
-                if(newGuessString.length() < NUMBER_LENGTH) {
-                    arrangeFound = false;
-                    guessStore.restoreDigits(storeIndex, digits);
-                }
-            }
-        } while(!arrangeFound);
+        } while(newGuessString.length() < NUMBER_LENGTH);
 
         return newGuessString;
     }
@@ -188,21 +175,17 @@ public class Guesser {
      * одной позиции.
      * @return Возвращает новый вариант, который может оказаться не полным из-за недостатка свободных цифр.
      */
-    public String tryToMakeGuess() {
+    private String tryToMakeGuess() {
         String guessString = "";
         Digit guessDigits[] = new Digit[NUMBER_LENGTH];
         boolean freeDigitUsed[] = new boolean[DIGITS_LENGTH];
 
         // Расставляем по местам всех быков
-        for (int guessDigitIndex = 0; guessDigitIndex < NUMBER_LENGTH; ++guessDigitIndex) {
-            for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
-                if (digits.getDigit(digitsIndex).isBull(guessDigitIndex)) {
-                    guessDigits[guessDigitIndex] = digits.getDigit(digitsIndex);
-                    break;
-                }
-            }
+        for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
+            if (digits.getDigit(digitsIndex).isBull())
+                guessDigits[digits.getDigit(digitsIndex).getPosition()] = digits.getDigit(digitsIndex);
         }
-        // Теперь пытаемся расставить всех коров
+        // Теперь пытаемся расставить всех коров и заполнить оставшиеся места
         switch (digits.cowsCount()) {
             case 0:
                 break;
@@ -220,24 +203,12 @@ public class Guesser {
                 }
                 break;
             default: // 2-3-4 cows
-                String firstPerm = null;
                 String allCows = digits.allCows();
-                int freeCount = 0;
-                // Дополняем список коров незадействованными цифрами
-                while(allCows.length() + digits.bullsCount() < NUMBER_LENGTH && freeCount++ < digits.freeCount()) {
-                    for(int i = 0; i < DIGITS_LENGTH; ++i) {
-                        if(digits.getDigit(i).isFree() && !freeDigitUsed[i]) {
-                            allCows += digits.getDigit(i).getDigitString();
-                            freeDigitUsed[i] = true;
-                            break;
-                        }
-                    }
-                }
+                allCows += digits.nextFreeDigits(NUMBER_LENGTH - (allCows.length() + digits.bullsCount()));
+                // Расставляя цифры, используем перестановки, чтобы не повторяться
                 Permutator permutator = new Permutator(allCows);
                 String perm = permutator.nextPerm();
-                while(!perm.equals(firstPerm)){
-                    if(firstPerm == null)
-                        firstPerm = perm;
+                while(perm.length() > 0){
                     Number number = new Number(perm);
                     int sedCowsCount = 0;
                     checkPermStart:
@@ -268,13 +239,15 @@ public class Guesser {
                 }
                 break;
         }
-        // Расставляем оставшиеся цифры
+        // Расставляем оставшиеся цифры, при необходимости
         for (int guessDigitIndex = 0; guessDigitIndex < NUMBER_LENGTH; ++guessDigitIndex) {
-            for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
-                if(digits.getDigit(digitsIndex).isFree() && !freeDigitUsed[digitsIndex] && guessDigits[guessDigitIndex] == null) {
-                    guessDigits[guessDigitIndex] = digits.getDigit(digitsIndex);
-                    freeDigitUsed[digitsIndex] = true;
-                    break;
+            if(guessDigits[guessDigitIndex] == null) {
+                for (int digitsIndex = 0; digitsIndex < DIGITS_LENGTH; ++digitsIndex) {
+                    if (digits.getDigit(digitsIndex).isFree() && !freeDigitUsed[digitsIndex]) {
+                        guessDigits[guessDigitIndex] = digits.getDigit(digitsIndex);
+                        freeDigitUsed[digitsIndex] = true;
+                        break;
+                    }
                 }
             }
         }
@@ -289,22 +262,9 @@ public class Guesser {
     }
 
     /**
-     * Добавляет результат новой попытки в свою "базу данных".
-     * @param guess вариант числа
-     * @param answer ответ на этот вариант
-     */
-    public void saveAnswer(String guess, int answer) {
-        guessStore.saveGuess(guess, answer);
-    }
-
-    /**
      * Набор цифр, хранящий текущее состояние в процессе анализа истории вариантов и ответов
      */
     public Digits digits;
-    /**
-     * Хранилище истории вариантов и ответов, а также оперативной информации
-     */
-    private GuessStore guessStore;
     /**
      * Количество цифр в загадываемом числе.
      */

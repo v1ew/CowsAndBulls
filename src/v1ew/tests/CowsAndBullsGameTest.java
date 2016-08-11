@@ -1,6 +1,5 @@
 package v1ew.tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import v1ew.cowsandbulls.CowsAndBullsGame;
 import v1ew.cowsandbulls.Generator;
@@ -18,7 +17,7 @@ public class CowsAndBullsGameTest {
         for(int i = 0; i < 20; ++i) {
             Generator generator = new Generator(Guesser.NUMBER_LENGTH);
             String number = generator.generate();
-            assertTrue(CowsAndBullsGame.start(number) < 9);
+            assertTrue(CowsAndBullsGame.start(number) < 9); // Rarely 9, then test fails
         }
     }
 

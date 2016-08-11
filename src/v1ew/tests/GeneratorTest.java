@@ -1,9 +1,9 @@
 package v1ew.tests;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import v1ew.cowsandbulls.Generator;
 import v1ew.cowsandbulls.Master;
+import v1ew.cowsandbulls.Helper;
 
 import static org.junit.Assert.*;
 
@@ -27,17 +27,17 @@ public class GeneratorTest {
     @Test
     public void generatorUniqueCheck() {
         Generator generator = new Generator(4);
-        assertEquals(isNumberDigitsUnique(generator.generate()), true);
-        assertEquals(isNumberDigitsUnique(generator.generate()), true);
-        assertEquals(isNumberDigitsUnique(generator.generate()), true);
+        assertEquals(Helper.isNumberDigitsUnique(generator.generate()), true);
+        assertEquals(Helper.isNumberDigitsUnique(generator.generate()), true);
+        assertEquals(Helper.isNumberDigitsUnique(generator.generate()), true);
     }
 
     @Test
     public void numberDigitsUniqueCheck() {
-        assertFalse(isNumberDigitsUnique("122567"));
-        assertTrue(isNumberDigitsUnique("23548"));
-        assertFalse(isNumberDigitsUnique("987659"));
-        assertTrue(isNumberDigitsUnique("85371"));
+        assertFalse(Helper.isNumberDigitsUnique("122567"));
+        assertTrue(Helper.isNumberDigitsUnique("23548"));
+        assertFalse(Helper.isNumberDigitsUnique("987659"));
+        assertTrue(Helper.isNumberDigitsUnique("85371"));
     }
 
     @Test(timeout=1000)
@@ -51,18 +51,5 @@ public class GeneratorTest {
         } while(answer < 40);
         System.out.println("Guess count: " + guessCount);
         assertEquals(answer, 40); // 40 - 4 быка, т.е. число угадано
-    }
-
-    private static boolean isNumberDigitsUnique(String number) {
-        int len = number.length();
-        for(int i = 0; i < len; ++i) {
-            char ch = number.charAt(i);
-            for(int j = i+1; j < len; ++j) {
-                if(ch == number.charAt(j)) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }

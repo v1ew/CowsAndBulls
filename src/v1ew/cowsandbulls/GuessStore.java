@@ -4,94 +4,79 @@ import java.util.ArrayList;
 
 /**
  * Created by Shakhov on 21.06.2016.
+ * Предоставляет итератор по базе вариантов и ответов.
  */
 public class GuessStore {
     public GuessStore() {
-        guessAnswers = new ArrayList<>();
-        arrangeIndexes = new ArrayList<>();
-        digitsStore = new ArrayList<>();
+        dataArrayList = new ArrayList<>();
     }
 
-    public void saveDigits(int index, Digits digitsToSave) {
-        Digits digits = digitsStore.get(index);
-        digits.reset();
-        for(int i = 0; i < digits.getLength(); ++i) {
-            digitsToSave.getDigit(i).copyTo(digits.getDigit(i));
-        }
-
+    public boolean hasNext() {
+        return (storeIndex + 1) < dataArrayList.size();
     }
 
-    public void restoreDigits(int index, Digits digits) {
-        Digits digitsFromLoad = digitsStore.get(index);
-        digits.reset();
-        for(int i = 0; i < digits.getLength(); ++i) {
-            digitsFromLoad.getDigit(i).copyTo(digits.getDigit(i));
-        }
+    public boolean hasPrev() {
+        return storeIndex > 0;
+    }
+
+    public void moveNext() {
+        if(hasNext())
+            storeIndex++;
+    }
+
+    public void movePrev() {
+        if(hasPrev())
+            storeIndex--;
+    }
+
+    public void saveDigits(Digits digitsToSave) {
+        dataArrayList.get(storeIndex).saveDigits(digitsToSave);
+    }
+
+    public void restoreDigits(Digits digitsToLoad) {
+        dataArrayList.get(storeIndex).restoreDigits(digitsToLoad);
     }
 
     public void saveGuess(String guess, int answer) {
-        guessAnswers.add(new GuessAnswer(guess, answer));
-        arrangeIndexes.add(0);
-        digitsStore.add(new Digits());
+        dataArrayList.add(new GuessData(guess, answer));
     }
 
     public int guessCount() {
-        return guessAnswers.size();
+        return dataArrayList.size();
     }
 
     public boolean isGuessNew(String guess) {
-        for(int i = 0; i < guessAnswers.size(); ++i) {
-            if(guessAnswers.get(i).getGuess().equals(guess)) {
+        for(GuessData guessData: dataArrayList) {
+            if(guessData.getGuess().equals(guess)) {
                 return false;
             }
         }
         return true;
     }
 
-    public String getGuess(int index) {
-        return guessAnswers.get(index).getGuess();
+    public String getGuess() {
+        return dataArrayList.get(storeIndex).getGuess();
     }
 
-    public int getAnswer(int index) {
-        return guessAnswers.get(index).getAnswer();
+    public int getAnswer() {
+        return dataArrayList.get(storeIndex).getAnswer();
     }
 
-    public GuessAnswer getGuessAnswer(int index) {
-        lastAskedIndex = index + 1;
-        return guessAnswers.get(index);
+    public String getArrange() {
+        return dataArrayList.get(storeIndex).getArrange();
     }
 
-    public GuessAnswer getGuessAnswer() {
-        if(lastAskedIndex < guessAnswers.size()) {
-            return guessAnswers.get(lastAskedIndex++);
-        } else {
-            lastAskedIndex = 0;
-            return null;
+    public void arrangeIndexReset() {
+        dataArrayList.get(storeIndex).resetArrange();
+    }
+
+    public void restart() {
+        storeIndex = 0;
+        for(GuessData guessData: dataArrayList) {
+            guessData.resetArrange();
         }
     }
 
-    public void arrangeIndexReset(int index) {
-        arrangeIndexes.set(index, 0);
-    }
-
-    public int getArrangeIndex(int index) {
-        return arrangeIndexes.get(index);
-    }
-
-    public int getArrangeIndexWithIncrement(int index) {
-        int arrangeIndex = arrangeIndexes.get(index);
-        arrangeIndexes.set(index, arrangeIndex + 1);
-        return arrangeIndex;
-    }
-
-    public void arrangesReset() {
-        for(int i = 0; i < arrangeIndexes.size(); ++i) {
-            arrangeIndexes.set(i, 0);
-        }
-    }
-
-    private ArrayList<GuessAnswer> guessAnswers;
-    private ArrayList<Integer> arrangeIndexes;
-    private ArrayList<Digits> digitsStore;
-    private int lastAskedIndex = 0;
+    private ArrayList<GuessData> dataArrayList;
+    private int storeIndex = 0;
 }

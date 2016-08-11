@@ -1,6 +1,7 @@
 package v1ew.tests;
 
 import org.junit.Test;
+import v1ew.cowsandbulls.Digit;
 import v1ew.cowsandbulls.Permutator;
 
 import static org.junit.Assert.*;
@@ -23,20 +24,22 @@ public class PermutatorTest {
     }
 
     @Test
-    public void sortCheck() {
-        Permutator permutator = new Permutator("325476");
-        permutator.sort();
-        assertEquals("234567", permutator.toString());
-    }
-
-    @Test
     public void nextPermCheck() {
-        Permutator permutator = new Permutator("325476");
-        assertEquals("325647", permutator.nextPerm());
-        assertEquals("325674", permutator.nextPerm());
-        assertEquals("325746", permutator.nextPerm());
-        assertEquals("325764", permutator.nextPerm());
-        assertEquals("326457", permutator.nextPerm());
-        assertEquals("326475", permutator.nextPerm());
+        int length = 6;
+        Digit[] digits = new Digit[length];
+        for(int i = 0; i < length; ++i)
+            digits[i] = new Digit(i + 2);
+        Permutator permutator = new Permutator(digits);
+        assertEquals("234567", permutator.nextPerm());
+        assertEquals("234576", permutator.nextPerm());
+        assertEquals("234657", permutator.nextPerm());
+        assertEquals("234675", permutator.nextPerm());
+        assertEquals("234756", permutator.nextPerm());
+        assertEquals("234765", permutator.nextPerm());
+        assertEquals("235467", permutator.nextPerm());
+        permutator = new Permutator("32");
+        assertEquals("23", permutator.nextPerm());
+        assertEquals("32", permutator.nextPerm());
+        assertEquals("", permutator.nextPerm());
     }
 }

@@ -2,17 +2,18 @@ package v1ew.cowsandbulls;
 
 /**
  * Created by Shakhov on 14.06.2016.
+ * Класс Master хранит загаданное число и отвечает на вопросы с вариантами количеством быков и коров.
+ * Также содержит статические методы, помогающие выделить из ответа коров и быков.
  */
 public class Master {
-    /*
+    /**
      * Заданное число передается конструктору в виде строки
      */
     public Master(String number) {
         this.number = number;
-//        System.out.println("Number is " + number);
     }
 
-    /*
+    /**
      * Версия передается в виде строки
      * Ответ в виде числа:
      * 0 - нет совпадений
@@ -38,14 +39,14 @@ public class Master {
         return bulls * 10 + cows;
     }
 
-    /*
+    /**
      * Коровы - количество единиц - остаток от деления на 10
      */
     public static int cows(int answer) {
         return answer % 10;
     }
 
-    /*
+    /**
      * Быки - количество десятков - остаток от деления на 100 минус количество единиц
      */
     public static int bulls(int answer) {

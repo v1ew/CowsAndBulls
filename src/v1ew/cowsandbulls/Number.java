@@ -2,8 +2,14 @@ package v1ew.cowsandbulls;
 
 /**
  * Created by Shakhov on 16.06.2016.
+ * Представляет число, заданной длины.
+ * Каждая цифра может иметь состояние и позицию в загаданном числе.
  */
 public class Number {
+    /**
+     * Создает число из цифр подряд от 0 до length-1
+     * @param length длина создаваемого числа
+     */
     public Number(int length) {
         this.length = length;
         digits = new Digit[length];
@@ -12,6 +18,12 @@ public class Number {
         }
     }
 
+    /**
+     * Создает число на основе строки из цифр, где цифры отображаются на общий набор цифр, отражающий состояние.
+     * В будущем изменения состояний цифр сразу отразятся в общем наборе цифр.
+     * @param numberString строка, представляющая число
+     * @param allDigits общий набор цифр
+     */
     public Number(String numberString, Digits allDigits) {
         length = numberString.length();
         digits = new Digit[length];
@@ -23,15 +35,13 @@ public class Number {
         }
     }
 
+    /**
+     * Создает число на основе строки из цифр. Каждая цифра - объект Digit.
+     * @param numberString строка, представляющая число
+     */
     public Number(String numberString) {
         length = numberString.length();
-        digits = new Digit[length];
-        int digitInt = Integer.parseInt(numberString);
-        for(int i = numberString.length() - 1; i >= 0; --i) {
-            int rest = digitInt % 10;
-            digits[i] = new Digit(rest);
-            digitInt /= 10;
-        }
+        digits = Helper.stringToDigits(numberString);
     }
 
     public void setDigit(int index, Digit digit) {
@@ -51,22 +61,14 @@ public class Number {
         return result;
     }
 
-    public String allNotBulls() {
+    public String nextFreeDigits(int howMuch) {
         String result = "";
-        for(int i = 0; i < length; ++i) {
-            if(digits[i].isCow() || digits[i].isFree())
-                result += digits[i].getDigitString();
+        for(Digit digit: digits) {
+            if(digit.isFree() && howMuch-- > 0) {
+                result += digit.getDigit();
+            }
         }
         return result;
-    }
-
-    public int freeCount() {
-        int counter = 0;
-        for(int i = 0; i < length; ++i) {
-            if(digits[i].isFree())
-                counter++;
-        }
-        return counter;
     }
 
     public int cowsCount() {
@@ -91,7 +93,7 @@ public class Number {
         return length;
     }
 
-    public void reset() {
+    public void freeAll() {
         for(int i = 0; i < length; ++i) {
             digits[i].free();
         }
@@ -104,7 +106,7 @@ public class Number {
         System.out.println(".");
     }
 
-    public Digit digits[];
-    protected int length;
+    protected Digit digits[];
+    private int length;
 
 }
