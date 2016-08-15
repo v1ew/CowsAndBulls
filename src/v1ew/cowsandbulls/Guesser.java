@@ -39,6 +39,13 @@ public class Guesser {
                     break;
             }
         }
+        if (digits.cowsCount() + digits.bullsCount() == 4) {
+            for (int i = 0; i < DIGITS_LENGTH; ++i) {
+                if (digits.getDigit(i).isFree()) {
+                    digits.getDigit(i).delete();
+                }
+            }
+        }
 //        System.out.print("mergeStates:");
 //        digits.print();
     }
