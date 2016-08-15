@@ -71,6 +71,11 @@ public class CowsAndBullsGameTest {
         CowsAndBullsGame.start("4832");
     }
 
+    @Test
+    public void start2431() {
+        CowsAndBullsGame.start("2431");
+    }
+
     // Template
     /*
     @Test
