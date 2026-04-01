@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.cowsandbulls.app</groupId>
+  <artifactId>cowsandbulls</artifactId>
+  <packaging>jar</packaging>
+  <version>1.1-test</version>
+  <name>cowsandbulls</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <mainclass>com.cowsandbulls.app.CowsAndBullsGame</mainclass>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/junit-4.12.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.yworks</groupId>
+      <artifactId>yguard</artifactId>
+      <version>5.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <id>obfuscate</id>
+            <configuration>
+              <tasks>
+                <property
+                 name="project.jar"
+                 value="${project.build.directory}/${project.build.finalName}.jar"/>
+                <property
+                 name="project.jar.unobf"
+                 value="${project.build.directory}/${project.build.finalName}_unobf.jar"/>
+                <move
+                 file="${project.jar}"
+                 tofile="${project.jar.unobf}"
+                 verbose="true"/>
+
+                <property
+                 name="runtime_classpath"
+                 refid="maven.runtime.classpath"/>
+                <taskdef
+                 name="yguard"
+                 classname="com.yworks.yguard.YGuardTask"
+                 classpath="${runtime_classpath}"/>
+                <yguard>
+                  <inoutpair in="${project.jar.unobf}" out="${project.jar}" />
+
+                  <rename logfile="${project.build.directory}/${project.build.finalName}_renamelog.xml">
+                    <property name="naming-scheme" value="best" />
+                    <property name="language-conformity" value="illegal" />
+                    <keep>
+                      <method name="void main(java.lang.String[])" class="${mainclass}"/>
+                      <!--class classes="public" methods="public" fields="public"-->
+                        <!--patternset-->
+                          <!--include name="**" /-->
+                        <!--/patternset-->
+                      <!--/class-->
+                    </keep>
+                  </rename>
+                </yguard>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>${mainclass}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
